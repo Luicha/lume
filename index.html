@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | Lumé</title>
+    <!-- Fuentes: Bodoni Moda y Manrope -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="marca">Lu / mé.</div>
+        <p class="tagline">Aprobado por Canela.</p>
+    </header>
+
+    </header>
+
+    <!-- NUEVO: Barra de búsqueda y categorías -->
+    <div class="filtros-container">
+        <div class="buscador">
+            <input type="text" id="input-busqueda" placeholder="Buscar productos...">
+        </div>
+        <div class="categorias-scroll" id="contenedor-categorias">
+            <!-- El JS inyectará los botones aquí -->
+        </div>
+    </div>
+
+    <main id="grid-productos">
+    <main id="grid-productos">
+        <!-- El JS inyectará las tarjetas aquí -->
+    </main>
+
+    <div id="barra-carrito" class="oculto">
+        <div class="resumen">
+            <span id="carrito-cantidad">0 items</span>
+            <span id="carrito-total">$0</span>
+        </div>
+        <button id="btn-comprar">Pedir por WhatsApp →</button>
+    </div>
+
+    <!-- Scripts en orden -->
+    <script src="catalogo.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

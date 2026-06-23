@@ -1,0 +1,236 @@
+:root {
+    --bg-color: #0B0B14;
+    --card-bg: #1A1A24;
+    --text-main: #FFFFFF;
+    --text-muted: #888899;
+    --accent-neon: #FF3D8B;
+    --accent-gold: #C9A35B;
+    --font-display: 'Bodoni Moda', serif;
+    --font-body: 'Manrope', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    padding-bottom: 100px; /* Espacio para la barra inferior */
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.marca {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-style: italic;
+    color: var(--accent-gold);
+}
+
+.tagline {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+#grid-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.producto-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.producto-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.producto-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.categoria {
+    font-size: 0.7rem;
+    color: var(--accent-neon);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nombre {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin: 5px 0 10px 0;
+    line-height: 1.2;
+}
+
+.precio {
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-top: auto;
+}
+
+/* Controles del carrito en la tarjeta */
+.controles {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.btn-control {
+    background: transparent;
+    color: var(--text-main);
+    border: none;
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-control:active { background: rgba(255,255,255,0.1); }
+
+.cantidad {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Barra inferior del carrito */
+#barra-carrito {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--accent-neon);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    z-index: 100;
+}
+
+#barra-carrito.oculto {
+    transform: translateY(100%);
+}
+
+.resumen { display: flex; flex-direction: column; }
+#carrito-total { font-weight: 800; font-size: 1.3rem; }
+#carrito-cantidad { font-size: 0.8rem; opacity: 0.9; }
+
+#btn-comprar {
+    background: var(--bg-color);
+    color: var(--text-main);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-family: var(--font-body);
+    cursor: pointer;
+}
+
+/* --- NUEVO: FILTROS Y BÚSQUEDA --- */
+.filtros-container {
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+
+.buscador input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--card-bg);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.buscador input:focus {
+    border-color: var(--accent-gold);
+}
+
+.buscador input::placeholder {
+    color: var(--text-muted);
+}
+
+.categorias-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.categorias-scroll::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.btn-categoria {
+    background: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.btn-categoria.activo {
+    background: var(--accent-gold);
+    color: var(--bg-color);
+    border-color: var(--accent-gold);
+    font-weight: 800;
+}
+
+/* --- NUEVO: ESTILOS DE STOCK --- */
+.stock-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.stock-label.agotado {
+    color: var(--accent-neon);
+    font-weight: 800;
+}
+
+.producto-card.sin-stock .producto-img {
+    filter: grayscale(100%) opacity(40%);
+}
+
+.btn-control:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
