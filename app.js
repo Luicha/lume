@@ -1,6 +1,6 @@
 (function() {
-    const catalogo = window.__CATALOGO__;
-    let carrito = {}; // Mantiene el estado global
+    const catalogo = []; // Se llenará con lo que venga de Google Sheets
+    let carrito = {}; // Mantiene el estado global de lo que elige el cliente
     
     // Variables de estado para los filtros
     let categoriaActiva = 'Todas';
@@ -12,13 +12,11 @@
     const lblTotal = document.getElementById('carrito-total');
     const btnComprar = document.getElementById('btn-comprar');
     
-    // Nuevos nodos
     const contenedorCategorias = document.getElementById('contenedor-categorias');
     const inputBusqueda = document.getElementById('input-busqueda');
 
     // 1. Generar botones de categoría dinámicamente
     function renderizarCategorias() {
-        // Extraer categorías únicas del catálogo
         const categoriasUnicas = ['Todas', ...new Set(catalogo.map(p => p.categoria))];
         
         contenedorCategorias.innerHTML = '';
@@ -29,7 +27,6 @@
             
             btn.onclick = () => {
                 categoriaActiva = cat;
-                // Refrescar clases visuales
                 document.querySelectorAll('.btn-categoria').forEach(b => b.classList.remove('activo'));
                 btn.classList.add('activo');
                 aplicarFiltros();
@@ -42,24 +39,20 @@
     // 2. Procesar la búsqueda y el filtro
     function aplicarFiltros() {
         const filtrados = catalogo.filter(prod => {
-            // Comprueba si coincide la categoría (o si es "Todas")
             const coincideCategoria = categoriaActiva === 'Todas' || prod.categoria === categoriaActiva;
-            // Comprueba si el nombre incluye el texto tipeado
             const coincideTexto = prod.nombre.toLowerCase().includes(textoBusqueda.toLowerCase());
-            
             return coincideCategoria && coincideTexto;
         });
         
         renderizarCatalogo(filtrados);
     }
 
-    // Escuchar cuando el usuario escribe
+    // Escuchar cuando el usuario escribe en el buscador
     inputBusqueda.addEventListener('input', (e) => {
         textoBusqueda = e.target.value;
         aplicarFiltros();
     });
 
-    // 3. Renderizar el grid (ahora recibe un array filtrado)
     // 3. Renderizar el grid con control de stock
     function renderizarCatalogo(productosRender) {
         grid.innerHTML = '';
@@ -77,7 +70,7 @@
             const textoStock = estaAgotado ? 'Agotado' : `Stock: ${prod.stock}`;
             const claseTextoStock = estaAgotado ? 'agotado' : '';
             
-            // Verificamos si ya alcanzó el máximo en el carrito para deshabilitar el botón "+"
+            // Verificamos si ya alcanzó el límite en el carrito
             const limiteAlcanzado = carrito[prod.id] >= prod.stock;
 
             const card = document.createElement('div');
@@ -105,23 +98,16 @@
 
     // 4. Lógica del carrito con tope de stock
     window.modificarCarrito = function(id, cambio) {
-        // Buscamos cuál es el límite de stock de este producto
         const producto = catalogo.find(p => p.id === id);
-        
         let nuevaCantidad = carrito[id] + cambio;
         
-        // No puede ser menor a 0
         if (nuevaCantidad < 0) nuevaCantidad = 0;
-        
-        // No puede ser mayor al stock disponible
-        if (nuevaCantidad > producto.stock) {
-            nuevaCantidad = producto.stock;
-        }
+        if (nuevaCantidad > producto.stock) nuevaCantidad = producto.stock;
         
         carrito[id] = nuevaCantidad;
         document.getElementById(`cant-${id}`).innerText = nuevaCantidad;
         
-        // Bloquear o desbloquear el botón "+" dependiendo de si llegamos al tope
+        // Bloquear el botón "+" si llegamos al tope
         const btnSumar = document.getElementById(`btn-sumar-${id}`);
         if (btnSumar) {
             btnSumar.disabled = (nuevaCantidad >= producto.stock);
@@ -130,11 +116,11 @@
         actualizarBarraInferior();
     };
 
+    // 5. EL CARRITO: Sumar el total y mostrar la barra flotante
     function actualizarBarraInferior() {
         let totalItems = 0;
         let totalDinero = 0;
 
-        // Se usa el array global 'catalogo' para cruzar la data, no los filtrados.
         catalogo.forEach(prod => {
             const cant = carrito[prod.id];
             if (cant > 0) {
@@ -153,7 +139,7 @@
         }
     }
 
-    // 5. Enviar a WhatsApp
+    // 6. EL CHECKOUT: Generar el mensaje de WhatsApp
     btnComprar.addEventListener('click', () => {
         let mensaje = `*¡Hola! Quiero hacer un pedido a ${CONFIG.nombreNegocio}:*\n\n`;
         let total = 0;
@@ -174,16 +160,13 @@
         window.open(url, '_blank');
     });
 
-// --- ARRANQUE ASÍNCRONO ---
+    // --- ARRANQUE ASÍNCRONO ---
     async function iniciarApp() {
-        // Mostrar un mensaje de carga temporal (opcional)
         grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted);">Cargando catálogo...</p>';
         
-        // Esperamos a que se bajen los datos de Google Sheets
         const exito = await cargarCatalogo();
         
         if (exito) {
-            // Re-asignamos la variable catalogo porque ahora ya tiene datos
             catalogo.length = 0; 
             catalogo.push(...window.__CATALOGO__);
             

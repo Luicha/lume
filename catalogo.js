@@ -1,6 +1,6 @@
 // Configuración general
 const CONFIG = {
-    telefono: "5492625581975", // Número de WhatsApp con código de país (54 para Argentina, 9 para celular)
+    telefono: "5492625637936", // Número de WhatsApp con código de país (54 para Argentina, 9 para celular)
     nombreNegocio: "Lumé",
     sheetID: "10asfMxPIX9BsoOzPaq0n8wX8lue_c2Z-xlpX1YgFnlo"
 };
