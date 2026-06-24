@@ -3,7 +3,7 @@
     let carrito = {}; // Mantiene el estado global de lo que elige el cliente
     
     // Variables de estado para los filtros
-    let categoriaActiva = 'Todas';
+    let categoriaActiva = 'Todo';
     let textoBusqueda = '';
 
     const grid = document.getElementById('grid-productos');
@@ -17,7 +17,7 @@
 
     // 1. Generar botones de categoría dinámicamente
     function renderizarCategorias() {
-        const categoriasUnicas = ['Todas', ...new Set(catalogo.map(p => p.categoria))];
+        const categoriasUnicas = ['Todo', ...new Set(catalogo.map(p => p.categoria))];
         
         contenedorCategorias.innerHTML = '';
         categoriasUnicas.forEach(cat => {
@@ -39,7 +39,7 @@
     // 2. Procesar la búsqueda y el filtro
     function aplicarFiltros() {
         const filtrados = catalogo.filter(prod => {
-            const coincideCategoria = categoriaActiva === 'Todas' || prod.categoria === categoriaActiva;
+            const coincideCategoria = categoriaActiva === 'Todo' || prod.categoria === categoriaActiva;
             const coincideTexto = prod.nombre.toLowerCase().includes(textoBusqueda.toLowerCase());
             return coincideCategoria && coincideTexto;
         });
@@ -176,6 +176,29 @@
             grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: #FF3D8B;">Hubo un error cargando los productos. Revisa tu conexión.</p>';
         }
     }
+
+    // --- MODO CLARO / OSCURO ---
+    const btnTheme = document.getElementById('theme-toggle');
+    const bodyElement = document.body;
+    
+    // 1. Revisar si el usuario ya tenía el modo claro guardado de antes
+    if (localStorage.getItem('lume_theme') === 'light') {
+        bodyElement.classList.add('light-theme');
+        btnTheme.innerText = '🌙';
+    }
+
+    // 2. Al tocar el botón, alternar la clase y guardar la memoria
+    btnTheme.addEventListener('click', () => {
+        bodyElement.classList.toggle('light-theme');
+        
+        if (bodyElement.classList.contains('light-theme')) {
+            localStorage.setItem('lume_theme', 'light');
+            btnTheme.innerText = '🌙'; // Cambia el icono a la luna
+        } else {
+            localStorage.setItem('lume_theme', 'dark');
+            btnTheme.innerText = '☀️'; // Cambia el icono al sol
+        }
+    });
 
     iniciarApp();
 })();
