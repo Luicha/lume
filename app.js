@@ -36,7 +36,7 @@
         });
     }
 
-    // 2. Procesar la búsqueda y el filtro
+    // 2. Procesar la búsqueda, el filtro y el orden
     function aplicarFiltros() {
         const filtrados = catalogo.filter(prod => {
             const coincideCategoria = categoriaActiva === 'Todo' || prod.categoria === categoriaActiva;
@@ -44,6 +44,16 @@
             return coincideCategoria && coincideTexto;
         });
         
+        // NUEVO: Ordenar para mandar los "Sin Stock" al fondo
+        filtrados.sort((a, b) => {
+            // Asignamos un 1 si tiene stock, y un 0 si está agotado
+            const tieneStockA = a.stock > 0 ? 1 : 0;
+            const tieneStockB = b.stock > 0 ? 1 : 0;
+            
+            // Comparamos: los que tienen 1 van arriba, los que tienen 0 van abajo
+            return tieneStockB - tieneStockA;
+        });
+
         renderizarCatalogo(filtrados);
     }
 
@@ -199,6 +209,8 @@
             btnTheme.innerText = '☀️'; // Cambia el icono al sol
         }
     });
+
+    
 
     iniciarApp();
 })();

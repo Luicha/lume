@@ -27,10 +27,10 @@ body {
     font-family: var(--font-body);
     padding-bottom: 120px;
     
-    /* Efecto Aurora / Luz difusa de fondo */
+    /* NUEVO: Luces más intensas y grandes para el modo oscuro */
     background-image: 
-        radial-gradient(circle at 15% 0%, rgba(255, 236, 61, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 30%, rgba(201, 163, 91, 0.06) 0%, transparent 50%);
+        radial-gradient(circle at 10% 0%, rgba(255, 158, 181, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 90% 20%, rgba(252, 225, 161, 0.12) 0%, transparent 55%);
     background-attachment: fixed;
     background-repeat: no-repeat;
 }
@@ -375,9 +375,9 @@ body.light-theme {
     --accent-gold: #D6A848;
     --accent-cyan: #5A9BE0;
     
-    background-image: 
-        radial-gradient(circle at 15% 0%, rgba(232, 106, 141, 0.04) 0%, transparent 40%),
-        radial-gradient(circle at 85% 30%, rgba(214, 168, 72, 0.04) 0%, transparent 50%);
+   background-image: 
+        radial-gradient(circle at 10% 0%, rgba(232, 106, 141, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 90% 20%, rgba(214, 168, 72, 0.12) 0%, transparent 60%);
 }
 
 /* Ajustes específicos para que los contrastes queden perfectos en modo claro */
