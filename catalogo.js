@@ -1,6 +1,6 @@
 // Configuración general
 const CONFIG = {
-    telefono: "5492625637936", // Número de WhatsApp con código de país (54 para Argentina, 9 para celular)
+    telefono: "5492625637936", // Número de WhatsApp con código de país
     nombreNegocio: "Lumé",
     sheetID: "10asfMxPIX9BsoOzPaq0n8wX8lue_c2Z-xlpX1YgFnlo"
 };
@@ -24,14 +24,30 @@ async function cargarCatalogo() {
             // Ignoramos filas vacías
             if (!fila.c[0] || !fila.c[0].v) return null; 
             
+            // 1. Obtenemos el link de la imagen si existe
+            let linkImagen = fila.c[4] ? fila.c[4].v : "";
+            
+            // 2. Si es un link de Drive, lo convertimos a link directo
+            if (linkImagen.includes("drive.google.com")) {
+                const match = linkImagen.match(/id=([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    linkImagen = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                }
+            }
+
+            // 3. El link de la imagen divertida de reemplazo
+            const fotoSimpson = "nodisponible.png";
+            
             return {
                 id: fila.c[0].v.toString(),
                 nombre: fila.c[1] ? fila.c[1].v : "Sin nombre",
                 categoria: fila.c[2] ? fila.c[2].v : "Otros",
                 precio: fila.c[3] ? Number(fila.c[3].v) : 0,
-                imagen: fila.c[4] ? fila.c[4].v : "",
+                // Operador ternario: si hay imagen, la usa. Si no, usa el placeholder
+                imagen: linkImagen ? linkImagen : fotoSimpson,
                 stock: fila.c[5] ? Number(fila.c[5].v) : 0
             };
+
         }).filter(producto => producto !== null);
 
         return true;
